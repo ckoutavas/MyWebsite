@@ -50,10 +50,11 @@ top_answer_cards = [
 ]
 
 # create reputation graph
-rep_fig = px.line(rep_df, x='creation_date', y='rep_cumsum', title='Stack Overflow Reputation', height=390,
+rep_fig = px.line(rep_df, x='creation_date', y='rep_cumsum', title='Stack Overflow Reputation', height=394,
                   labels={'creation_date': 'Date', 'rep_cumsum': 'Reputation'}, template='plotly_dark')
-rep_fig.update_layout(plot_bgcolor='#303030', paper_bgcolor='#303030', xaxis=dict(gridcolor='lightgrey'),
-                      yaxis=dict(gridcolor='lightgrey'), hovermode='x unified')
+rep_fig.update_layout(plot_bgcolor='#303030', paper_bgcolor='#303030',
+                      xaxis=dict(gridcolor='lightgrey', linecolor='lightgrey'),
+                      yaxis=dict(gridcolor='lightgrey', linecolor='lightgrey'), hovermode='x unified')
 rep_fig.update_traces(line_color='#00bc8c')
 
 # get my current ranking on Stack Overflow
