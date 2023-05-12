@@ -43,3 +43,23 @@ def to_sql(db_con: sqlite3.connect) -> None:
     # we do not need to keep all the data as I am just displaying the most recent
     qa_df.to_sql('recent_answers', db_con, index=False, if_exists='replace')
     top_qa_df.to_sql('top_answers', db_con, index=False, if_exists='replace')
+
+    # reputation
+    dfs = []
+    for i in range(1, 15):
+        rep = requests.get(
+            f'https://api.stackexchange.com/2.3/users/9177877/reputation-history?page={i}&pagesize=100&site=stackoverflow').json()
+        rep_df = pd.json_normalize(rep['items'])
+        dfs.append(rep_df)
+
+    df = pd.concat(dfs)
+    df['creation_date'] = pd.to_datetime(df['creation_date'], unit='s')
+    df = df.sort_values('creation_date')
+    df['rep_cumsum'] = df['reputation_change'].cumsum()
+    df['post_id'] = df['post_id'].astype('Int64')
+
+    df.to_sql('reputation', db_con, index=False, if_exists='replace')
+
+
+db = sqlite3.connect('StackOverflow.db')
+to_sql(db)
