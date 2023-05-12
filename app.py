@@ -114,7 +114,7 @@ app.layout = html.Div([
 
 # css for button style on click
 selected_css = {'backgroundColor': '#00bc8c',
-            'marginRight': '20px'}
+                'marginRight': '20px'}
 not_selected_css = {'marginRight': '20px'}
 
 
