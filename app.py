@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import sqlite3
 import pandas as pd
 import plotly.express as px
+import cards
 
 # setup
 external_stylesheets = [dbc.themes.DARKLY]
@@ -50,12 +51,32 @@ top_answer_cards = [
 ]
 
 # create reputation graph
-rep_fig = px.line(rep_df, x='creation_date', y='rep_cumsum', title='Stack Overflow Reputation', height=394,
+rep_fig = px.line(rep_df, x='creation_date', y='rep_cumsum', title='Stack Overflow Reputation',
                   labels={'creation_date': 'Date', 'rep_cumsum': 'Reputation'}, template='plotly_dark')
 rep_fig.update_layout(plot_bgcolor='#303030', paper_bgcolor='#303030',
                       xaxis=dict(gridcolor='lightgrey', linecolor='lightgrey'),
                       yaxis=dict(gridcolor='lightgrey', linecolor='lightgrey'), hovermode='x unified')
 rep_fig.update_traces(line_color='#00bc8c')
+rep_graph = dcc.Graph(figure=rep_fig, style={'margin': '20px 0px 20px 0px'})
+
+# add reputation graph to the lists below
+recent_answer_cards.append(rep_graph)
+top_answer_cards.append(rep_graph)
+
+fun_project_cards = dbc.Col([
+    # row 1
+    dbc.Row([
+        dbc.Col(cards.MMM_PiTemp_card, width=4),
+        dbc.Col(cards.covid, width=4),
+        dbc.Col(cards.ga4, width=4),
+    ], style={'marginBottom': '20px'}),
+    # row 2
+    dbc.Row([
+        dbc.Col(cards.MMM_DHT, width=4),
+        dbc.Col(cards.twitter, width=4),
+        dbc.Col(cards.social_media, width=4),
+    ]),
+])
 
 # get my current ranking on Stack Overflow
 soup = BeautifulSoup(requests.get('https://stackoverflow.com/users/rank?userId=9177877').text.strip(),
@@ -63,53 +84,84 @@ soup = BeautifulSoup(requests.get('https://stackoverflow.com/users/rank?userId=9
 
 # webpage layout
 app.layout = html.Div([
-    # page heading
-    html.Div(
-        children=[
-            html.Center(html.H1("Chris Koutavas' Portfolio")),
-            # stack exchange reputation image that is updated every 24-48 hours
-            html.Div(
-                children=[
-                    html.A(href='https://stackoverflow.com/users/9177877/it-is-chris', target='_blank',
-                           children=[html.Img(src='https://stackexchange.com/users/flair/12623101.png',
-                                              width=208, height=58, alt='profile for It_is_Chris on Stack Exchange',
-                                              title='profile for It_is_Chris on Stack Exchange')], id='stack-rep'),
-                    html.Br(),
-                    # Parse current ranking on Stack Overflow
-                    html.A(href=soup.find('a')['href'], target='_blank',
-                           children=[html.Span(soup.find('a').text)],
-                           style={'margin': '0px 0px 0px 40px'})
-
-                ], id='stack-user-data', style={'position': 'absolute', 'right': '20px', 'top': '10px'}),
-        ]
-    ),
-    html.Br(),
-    html.Br(),
-    # stack overflow buttons
-    html.Div(
-        children=[
-            html.Button('Top Answers on Stack Overflow', id='top-answers', style={'marginRight': '10px'}),
-            html.Button('Recent Answers on Stack Overflow', id='recent-answers'),
-        ],
-        style={'margin': '0px 0px 20px 20px'}
-    ),
-    # container for the stack overflow answer data
-    html.Div(
-        children=[
-            html.Div(id='answer-data', style={'marginRight': '20px'}),
-            dcc.Graph(id='rep-graph', style={'marginRight': '20px'})
-        ],
-        style={'display': 'flex', 'flexDirection': 'row', 'marginLeft': '20px'}
-    ),
-    html.Footer(
-        children=[
-            html.A(html.Button('View Website Source Code'),
-                   href='https://github.com/ckoutavas/MyWebsite',
-                   target='_blank')
-        ],
-        style={'position': 'absolute', 'right': '20px', 'bottom': '20px'}
-    )
-
+    # column layout 1/3 2/3
+    dbc.Row([
+        # column 1 1/3
+        dbc.Col([
+            dbc.Row([
+                # page heading
+                html.Div(
+                    children=[
+                        html.Img(src=app.get_asset_url('ChrisKoutavas.jpeg'), alt='Chris Koutavas headshot',
+                                 style={'borderRadius': '10%', 'margin': '20px 0px 0px 10px'}),
+                        html.Center(html.H1('Chris Koutavas', style={'margin': '20px 0px 0px 0px'})),
+                        html.Br(),
+                        # stack exchange reputation image that is updated every 24-48 hours
+                        html.Center([
+                            html.Div(
+                                children=[
+                                    html.A(href='https://stackoverflow.com/users/9177877/it-is-chris', target='_blank',
+                                           children=[html.Img(src='https://stackexchange.com/users/flair/12623101.png',
+                                                              width=208, height=58,
+                                                              alt='profile for It_is_Chris on Stack Exchange',
+                                                              title='profile for It_is_Chris on Stack Exchange')],
+                                           id='stack-rep'),
+                                    html.Br(),
+                                    # Parse current ranking on Stack Overflow
+                                    html.A(href=soup.find('a')['href'], target='_blank',
+                                           children=[html.Span(soup.find('a').text)]),
+                                ], id='stack-user-data'),
+                            html.Br(),
+                            dbc.Card(
+                                dbc.ListGroup(
+                                    [
+                                        dbc.ListGroupItem('Stack Overflow',
+                                                          href='https://stackoverflow.com/users/9177877/it-is-chris',
+                                                          target='_blank'),
+                                        dbc.ListGroupItem('GitHub',
+                                                          href='https://github.com/ckoutavas', target='_blank'),
+                                        dbc.ListGroupItem('LinkedIn',
+                                                          href='https://www.linkedin.com/in/chris-koutavas-6204a9113/',
+                                                          target='_blank'),
+                                        dbc.ListGroupItem('Website Source Code',
+                                                          href='https://github.com/ckoutavas/MyWebsite',
+                                                          target='_blank')
+                                    ],
+                                    flush=True
+                                ), style={'marginLeft': '20px'}
+                            ),
+                        ]
+                        )
+                    ]
+                ),
+            ])
+        ], width=3),
+        # colum 2 2/3
+        dbc.Col([
+            dbc.Row([
+                # stack overflow buttons
+                html.Div(
+                    children=[
+                        html.Button('Top Answers on Stack Overflow', id='top-answers', style={'marginRight': '10px'}),
+                        html.Button('Recent Answers on Stack Overflow', id='recent-answers'),
+                        html.Button('Fun Projects', id='recent-projects')
+                    ],
+                    style={'margin': '20px 0px 20px 0px'}
+                ),
+                # container for the stack overflow answer data
+                html.Div(
+                    children=[
+                        html.Div(id='button-data', style={'margin': '0px 20px 0px 0px'}),
+                        dbc.Offcanvas(
+                            html.P(id='off-canvas-text'),
+                            id="off-canvas",
+                            is_open=False, placement='bottom'
+                        ),
+                    ],
+                ),
+            ])
+        ], width=9)
+    ]),
 ])
 
 # css for button style on click
@@ -118,18 +170,21 @@ selected_css = {'backgroundColor': '#00bc8c',
 not_selected_css = {'marginRight': '20px'}
 
 
-@app.callback(Output('answer-data', 'children'),
-              Output('rep-graph', 'figure'),
+@app.callback(Output('button-data', 'children'),
               Output('top-answers', 'style'),
               Output('recent-answers', 'style'),
+              Output('recent-projects', 'style'),
               Input('top-answers', 'n_clicks'),
-              Input('recent-answers', 'n_clicks'))
-def card_select(top_click, recent_click):
+              Input('recent-answers', 'n_clicks'),
+              Input('recent-projects', 'n_clicks'))
+def card_select(*args):
     trigger = dash.callback_context.triggered[0]
     if trigger['prop_id'] == 'recent-answers.n_clicks':
-        return recent_answer_cards, rep_fig, not_selected_css, selected_css
+        return recent_answer_cards, not_selected_css, selected_css, not_selected_css
+    elif trigger['prop_id'] == 'recent-projects.n_clicks':
+        return fun_project_cards, not_selected_css, not_selected_css, selected_css
     else:
-        return top_answer_cards, rep_fig, selected_css, not_selected_css
+        return top_answer_cards, selected_css, not_selected_css, not_selected_css
 
 
 if __name__ == '__main__':
