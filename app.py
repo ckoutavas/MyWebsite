@@ -90,7 +90,6 @@ app.layout = html.Div([
         children=[
             html.Button('Top Answers on Stack Overflow', id='top-answers', style={'marginRight': '10px'}),
             html.Button('Recent Answers on Stack Overflow', id='recent-answers'),
-            html.H2(id='card-title')
         ],
         style={'margin': '0px 0px 20px 20px'}
     ),
@@ -113,18 +112,24 @@ app.layout = html.Div([
 
 ])
 
+# css for button style on click
+selected_css = {'backgroundColor': '#00bc8c',
+            'marginRight': '20px'}
+not_selected_css = {'marginRight': '20px'}
+
 
 @app.callback(Output('answer-data', 'children'),
               Output('rep-graph', 'figure'),
-              Output('card-title', 'children'),
+              Output('top-answers', 'style'),
+              Output('recent-answers', 'style'),
               Input('top-answers', 'n_clicks'),
               Input('recent-answers', 'n_clicks'))
 def card_select(top_click, recent_click):
     trigger = dash.callback_context.triggered[0]
     if trigger['prop_id'] == 'recent-answers.n_clicks':
-        return recent_answer_cards, rep_fig, 'Recent Answers on Stack Overflow'
+        return recent_answer_cards, rep_fig, not_selected_css, selected_css
     else:
-        return top_answer_cards, rep_fig, 'Top Answers on Stack Overflow'
+        return top_answer_cards, rep_fig, selected_css, not_selected_css
 
 
 if __name__ == '__main__':
