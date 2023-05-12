@@ -80,7 +80,7 @@ app.layout = html.Div([
                            children=[html.Span(soup.find('a').text)],
                            style={'margin': '0px 0px 0px 40px'})
 
-                ], id='stack-user-data', style={'position': 'absolute', 'right': '20px', 'top': '20px'}),
+                ], id='stack-user-data', style={'position': 'absolute', 'right': '20px', 'top': '10px'}),
         ]
     ),
     html.Br(),
