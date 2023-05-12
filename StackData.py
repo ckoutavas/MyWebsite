@@ -1,7 +1,6 @@
 import requests
 import sqlite3
 import pandas as pd
-from typing import Tuple
 
 
 def to_sql(db_con: sqlite3.connect) -> None:
@@ -22,6 +21,7 @@ def to_sql(db_con: sqlite3.connect) -> None:
     # merge frames together
     qa_df = df_questions.merge(df_answers, on='question_id', suffixes=['_q', '_a'])
     qa_df['creation_date'] = pd.to_datetime(qa_df['creation_date'], unit='s').dt.date
+    qa_df['title'] = qa_df['title'].str.replace('&quot;', '"')
 
     # get my top answers and create a DataFrame
     top_answers = requests.get('https://api.stackexchange.com/2.3/users/9177877/tags/pandas/top-answers?order=desc'
@@ -37,11 +37,9 @@ def to_sql(db_con: sqlite3.connect) -> None:
     top_questions_df = pd.json_normalize(top_questions['items'])[['question_id', 'title', 'link']]
     top_qa_df = top_questions_df.merge(top_answer_df, on='question_id',  suffixes=['_q', '_a'])
     top_qa_df['creation_date'] = pd.to_datetime(top_qa_df['creation_date'], unit='s').dt.date
+    top_qa_df['title'] = top_qa_df['title'].str.replace('&quot;', '"')
 
     # save df to sql db and replace
     # we do not need to keep all the data as I am just displaying the most recent
     qa_df.to_sql('recent_answers', db_con, index=False, if_exists='replace')
     top_qa_df.to_sql('top_answers', db_con, index=False, if_exists='replace')
-
-
-# to_sql(sqlite3.connect('StackOverflow.db'))
