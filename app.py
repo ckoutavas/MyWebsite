@@ -64,19 +64,26 @@ soup = BeautifulSoup(requests.get('https://stackoverflow.com/users/rank?userId=9
 # webpage layout
 app.layout = html.Div([
     # page heading
-    html.Center(html.H1("Chris Koutavas' Portfolio")),
-    # stack exchange reputation image that is updated every 24-48 hours
-    html.Div(children=[
-        html.A(href='https://stackoverflow.com/users/9177877/it-is-chris', target='_blank',
-               children=[html.Img(src='https://stackexchange.com/users/flair/12623101.png',
-                                  width=208, height=58, alt='profile for It_is_Chris on Stack Exchange',
-                                  title='profile for It_is_Chris on Stack Exchange')], id='stack-rep'),
-        html.Br(),
-        # Parse current ranking on Stack Overflow
-        html.A(href=soup.find('a')['href'], target='_blank',
-               children=[html.Span(soup.find('a').text)])
+    html.Div(
+        children=[
+            html.Center(html.H1("Chris Koutavas' Portfolio")),
+            # stack exchange reputation image that is updated every 24-48 hours
+            html.Div(
+                children=[
+                    html.A(href='https://stackoverflow.com/users/9177877/it-is-chris', target='_blank',
+                           children=[html.Img(src='https://stackexchange.com/users/flair/12623101.png',
+                                              width=208, height=58, alt='profile for It_is_Chris on Stack Exchange',
+                                              title='profile for It_is_Chris on Stack Exchange')], id='stack-rep'),
+                    html.Br(),
+                    # Parse current ranking on Stack Overflow
+                    html.A(href=soup.find('a')['href'], target='_blank',
+                           children=[html.Span(soup.find('a').text)],
+                           style={'margin': '0px 0px 0px 40px'})
 
-    ], id='stack-user-data', style={'margin': '0px 0px 0px 20px'}),
+                ], id='stack-user-data', style={'position': 'absolute', 'right': '20px', 'top': '20px'}),
+        ]
+    ),
+    html.Br(),
     html.Br(),
     # stack overflow buttons
     html.Div(
@@ -94,6 +101,14 @@ app.layout = html.Div([
             dcc.Graph(id='rep-graph', style={'marginRight': '20px'})
         ],
         style={'display': 'flex', 'flexDirection': 'row', 'marginLeft': '20px'}
+    ),
+    html.Footer(
+        children=[
+            html.A(html.Button('View Website Source Code'),
+                   href='https://github.com/ckoutavas/MyWebsite',
+                   target='_blank')
+        ],
+        style={'position': 'absolute', 'right': '20px', 'bottom': '20px'}
     )
 
 ])
