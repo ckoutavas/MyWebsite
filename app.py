@@ -66,7 +66,7 @@ top_answer_cards.append(rep_graph)
 fun_project_cards = dbc.Col([
     # row 1
     dbc.Row([
-        dbc.Col(cards.MMM_PiTemp_card, width=4),
+        dbc.Col(cards.MMM_PiTemp, width=4),
         dbc.Col(cards.covid, width=4),
         dbc.Col(cards.ga4, width=4),
     ], style={'marginBottom': '20px'}),

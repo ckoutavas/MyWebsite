@@ -5,7 +5,7 @@ p_css = {'height': '100px'}
 button_css = {'width': '100%'}
 
 # create cards for Fun Projects
-MMM_PiTemp_card = dbc.Card([
+MMM_PiTemp = dbc.Card([
     dbc.CardHeader('MMM-PiTemp'),
     dbc.CardBody([
         html.P('A MagicMirror2 module that tells you the temperature of your Raspberry Pi. The program '
