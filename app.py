@@ -83,18 +83,18 @@ soup = BeautifulSoup(requests.get('https://stackoverflow.com/users/rank?userId=9
                      'html.parser')
 
 # webpage layout
-app.layout = html.Div([
-    # column layout 1/3 2/3
-    dbc.Row([
-        # column 1 1/3
-        dbc.Col([
-            dbc.Row([
+app.layout = dbc.Container([
+    html.Div([
+        # layout 1/3 2/3
+        dbc.Row([
+            # column 1 1/3
+            dbc.Col([
                 # page heading
                 html.Div(
                     children=[
                         html.Img(src=app.get_asset_url('ChrisKoutavas.jpeg'), alt='Chris Koutavas headshot',
-                                 style={'borderRadius': '10%', 'margin': '20px 0px 0px 10px'}),
-                        html.Center(html.H1('Chris Koutavas', style={'margin': '20px 0px 0px 0px'})),
+                                 style={'borderRadius': '10%', 'marginTop': '20px', 'width': '100%'}),
+                        html.Center(html.H1('Chris Koutavas')),
                         html.Br(),
                         # stack exchange reputation image that is updated every 24-48 hours
                         html.Center([
@@ -102,7 +102,7 @@ app.layout = html.Div([
                                 children=[
                                     html.A(href='https://stackoverflow.com/users/9177877/it-is-chris', target='_blank',
                                            children=[html.Img(src='https://stackexchange.com/users/flair/12623101.png',
-                                                              width=208, height=58,
+                                                              width='80%',
                                                               alt='profile for It_is_Chris on Stack Exchange',
                                                               title='profile for It_is_Chris on Stack Exchange')],
                                            id='stack-rep'),
@@ -128,21 +128,19 @@ app.layout = html.Div([
                                                           target='_blank')
                                     ],
                                     flush=True
-                                ), style={'marginLeft': '20px'}
+                                )
                             ),
                         ]
                         )
                     ]
                 ),
-            ])
-        ], width=3),
-        # colum 2 2/3
-        dbc.Col([
-            dbc.Row([
+            ], md=3),
+            # colum 2 2/3
+            dbc.Col([
                 # stack overflow buttons
                 html.Div(
                     children=[
-                        html.Button('Top Answers on Stack Overflow', id='top-answers', style={'marginRight': '10px'}),
+                        html.Button('Top Answers on Stack Overflow', id='top-answers'),
                         html.Button('Recent Answers on Stack Overflow', id='recent-answers'),
                         html.Button('Fun Projects', id='recent-projects')
                     ],
@@ -151,7 +149,7 @@ app.layout = html.Div([
                 # container for the stack overflow answer data
                 html.Div(
                     children=[
-                        html.Div(id='button-data', style={'margin': '0px 20px 0px 0px'}),
+                        html.Div(id='button-data'),
                         dbc.Offcanvas(
                             html.P(id='off-canvas-text'),
                             id="off-canvas",
@@ -159,10 +157,10 @@ app.layout = html.Div([
                         ),
                     ],
                 ),
-            ])
-        ], width=9)
-    ]),
-])
+            ], md=9)
+        ]),
+    ])
+], fluid=True)
 
 # css for button style on click
 selected_css = {'backgroundColor': '#00bc8c',
@@ -188,4 +186,4 @@ def card_select(*args):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
