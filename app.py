@@ -63,19 +63,18 @@ rep_graph = dcc.Graph(figure=rep_fig, style={'margin': '20px 0px 20px 0px'})
 recent_answer_cards.append(rep_graph)
 top_answer_cards.append(rep_graph)
 
-fun_project_cards = dbc.Col([
-    # row 1
-    dbc.Row([
-        dbc.Col(cards.MMM_PiTemp, width=4),
-        dbc.Col(cards.covid, width=4),
-        dbc.Col(cards.ga4, width=4),
-    ], style={'marginBottom': '20px'}),
-    # row 2
-    dbc.Row([
-        dbc.Col(cards.MMM_DHT, width=4),
-        dbc.Col(cards.twitter, width=4),
-        dbc.Col(cards.social_media, width=4),
+# fun project cards
+fun_project_cards = dbc.CardGroup([
+    dbc.CardGroup([
+        cards.MMM_PiTemp,
+        cards.covid,
+        cards.ga4
     ]),
+    dbc.CardGroup([
+        cards.MMM_DHT,
+        cards.twitter,
+        cards.social_media
+    ])
 ])
 
 # get my current ranking on Stack Overflow
@@ -147,16 +146,7 @@ app.layout = dbc.Container([
                     style={'margin': '20px 0px 20px 0px'}
                 ),
                 # container for the stack overflow answer data
-                html.Div(
-                    children=[
-                        html.Div(id='button-data'),
-                        dbc.Offcanvas(
-                            html.P(id='off-canvas-text'),
-                            id="off-canvas",
-                            is_open=False, placement='bottom'
-                        ),
-                    ],
-                ),
+                html.Div(id='button-data'),
             ], md=9)
         ]),
     ])
@@ -186,4 +176,4 @@ def card_select(*args):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
