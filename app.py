@@ -17,8 +17,7 @@ server = app.server
 # get the Stack Overflow question, answer and rep data form SQL DB
 db = sqlite3.connect('StackOverflow.db')
 recent_answers_df = pd.read_sql('SELECT * FROM recent_answers LIMIT 5', db)
-top_answers_df = pd.read_sql('SELECT * FROM top_answers ORDER BY score DESC LIMIT 5', db) \
-    .sort_values('score', ascending=False)
+top_answers_df = pd.read_sql('SELECT * FROM top_answers ORDER BY score DESC LIMIT 5', db)
 rep_df = pd.read_sql('SELECT * FROM reputation', db)
 
 # create the cards for stack overflow answers
